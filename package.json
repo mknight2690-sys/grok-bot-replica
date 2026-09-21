@@ -1,0 +1,17 @@
+{
+  "name": "grok-bot-electron",
+  "version": "1.0.0",
+  "description": "Free Grok-style bot in headless Electron, hosted on GitHub Actions",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "bot": "node run-bot.js",
+    "ci": "node run-bot.js --ci-mode"
+  },
+  "devDependencies": {
+    "electron": "^44.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.20.0"
+  }
+}

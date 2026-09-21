@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>🧠 Grok Bot 24/7</title>
+  <style>
+    body { font-family: system-ui; margin: 20px; background: #0a0a0f; color: #e0e0e0; }
+    h1 { color: #00d4ff; }
+    #chat { height: 500px; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 10px; }
+    .msg { margin: 8px 0; padding: 8px; border-radius: 8px; }
+    .user { background: #1a1a2e; border-left: 3px solid #00d4ff; }
+    .bot  { background: #16213e; border-left: 3px solid #ff4757; }
+    #input { width: 80%; padding: 10px; background: #1a1a2e; color: #e0e0e0; border: 1px solid #333; }
+    #send { padding: 10px 20px; background: #00d4ff; color: #000; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🧠 Grok Bot 24/7</h1>
+  <div id="bot-info"></div>
+  <div id="chat"></div>
+  <input id="input" placeholder="Ask Grok anything..." autocomplete="off">
+  <button id="send">Send</button>
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const send = document.getElementById('send');
+    window.api.getModelInfo().then(info => {
+      document.getElementById('bot-info').textContent = `Model: ${info.model} | Provider: ${info.provider}`;
+    });
+    function addMsg(sender, text) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + sender;
+      div.innerHTML = `<b>${sender}:</b> ${text}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    send.onclick = async () => {
+      const msg = input.value.trim();
+      if (!msg) return;
+      addMsg('user', msg);
+      input.value = '';
+      const resp = await window.api.sendMessage(msg);
+      addMsg('bot', resp.response || resp.error || 'No response');
+    };
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') send.onclick();
+    });
+  </script>
+</body>
+</html>
